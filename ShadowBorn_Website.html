@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHADOWBORN — Official</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black: #080808;
+  --deep: #0d0000;
+  --red: #9B0000;
+  --bright: #CC0000;
+  --gold: #C9A84C;
+  --gold-light: #FFD700;
+  --white: #F0F0F0;
+  --gray: #555;
+  --light-gray: #999;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Crimson Text',serif;
+  cursor:crosshair;
+  overflow-x:hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:#000;}
+::-webkit-scrollbar-thumb{background:var(--red);}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.4;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;
+  top:0;width:100%;
+  z-index:1000;
+  padding:16px 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(to bottom,rgba(8,8,8,0.95),transparent);
+  border-bottom:1px solid rgba(155,0,0,0.2);
+}
+.nav-logo{
+  font-family:'Cinzel',serif;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:6px;
+  color:var(--gold);
+  text-decoration:none;
+}
+.nav-logo span{color:var(--bright);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:3px;
+  color:var(--light-gray);
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:color 0.3s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  bottom:-4px;left:0;
+  width:0;height:1px;
+  background:var(--red);
+  transition:width 0.3s;
+}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{width:100%;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  padding:120px 24px 80px;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(139,0,0,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 40% at 50% 60%, rgba(139,0,0,0.08) 0%, transparent 60%);
+}
+
+/* Animated grid lines */
+.hero-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(155,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,0,0,0.06) 1px, transparent 1px);
+  background-size:60px 60px;
+  animation:gridMove 20s linear infinite;
+}
+@keyframes gridMove{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(60px);}
+}
+
+/* Corner decorations */
+.corner{position:absolute;width:60px;height:60px;}
+.corner::before,.corner::after{content:'';position:absolute;background:var(--gold);opacity:0.6;}
+.corner-tl{top:80px;left:40px;}
+.corner-tl::before{top:0;left:0;width:100%;height:2px;}
+.corner-tl::after{top:0;left:0;width:2px;height:100%;}
+.corner-tr{top:80px;right:40px;}
+.corner-tr::before{top:0;right:0;width:100%;height:2px;}
+.corner-tr::after{top:0;right:0;width:2px;height:100%;}
+.corner-bl{bottom:60px;left:40px;}
+.corner-bl::before{bottom:0;left:0;width:100%;height:2px;}
+.corner-bl::after{bottom:0;left:0;width:2px;height:100%;}
+.corner-br{bottom:60px;right:40px;}
+.corner-br::before{bottom:0;right:0;width:100%;height:2px;}
+.corner-br::after{bottom:0;right:0;width:2px;height:100%;}
+
+.hero-skull{
+  font-size:28px;
+  letter-spacing:16px;
+  color:var(--red);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 0.3s;
+}
+
+.hero-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(52px, 10vw, 110px);
+  font-weight:900;
+  letter-spacing:12px;
+  line-height:1;
+  color:var(--white);
+  text-shadow:
+    0 0 60px rgba(204,0,0,0.4),
+    0 0 120px rgba(204,0,0,0.15);
+  opacity:0;
+  animation:fadeUp 1s ease forwards 0.6s;
+}
+
+.hero-title span{
+  color:var(--bright);
+  display:block;
+}
+
+.hero-line{
+  width:180px;height:2px;
+  background:linear-gradient(to right, transparent, var(--gold), transparent);
+  margin:28px auto;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 0.9s;
+}
+
+.hero-tagline{
+  font-family:'Crimson Text',serif;
+  font-style:italic;
+  font-size:clamp(16px,2.5vw,22px);
+  color:var(--gold);
+  letter-spacing:3px;
+  margin-bottom:48px;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 1.1s;
+}
+
+.hero-btns{
+  display:flex;gap:20px;flex-wrap:wrap;justify-content:center;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 1.4s;
+}
+
+.btn-primary{
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  padding:16px 40px;
+  background:var(--red);
+  color:var(--white);
+  border:none;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s;
+  clip-path:polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:var(--bright);
+  transform:translateX(-100%);
+  transition:transform 0.3s;
+}
+.btn-primary:hover::before{transform:translateX(0);}
+.btn-primary span{position:relative;z-index:1;}
+
+.btn-secondary{
+  font-family:'Rajdhani',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  padding:15px 40px;
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+  text-decoration:none;
+  transition:all 0.3s;
+  clip-path:polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn-secondary:hover{background:rgba(201,168,76,0.1);}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px;letter-spacing:4px;
+  color:var(--gray);
+  text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;
+  animation:fadeUp 1s ease forwards 2s;
+}
+.scroll-dot{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom, var(--red), transparent);
+  animation:scrollPulse 2s ease infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{opacity:0.3;} 50%{opacity:1;}
+}
+
+/* ── SECTIONS ── */
+section{padding:100px 48px;}
+
+.section-header{
+  text-align:center;
+  margin-bottom:70px;
+}
+.section-eyebrow{
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px;font-weight:700;
+  letter-spacing:6px;text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:12px;
+}
+.section-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(28px,5vw,48px);
+  font-weight:700;
+  letter-spacing:4px;
+  color:var(--white);
+  margin-bottom:16px;
+}
+.section-line{
+  width:80px;height:2px;
+  background:linear-gradient(to right, var(--red), var(--gold));
+  margin:0 auto;
+}
+
+/* ── WHAT IS SECTION ── */
+#about{background:var(--black);}
+
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  max-width:1100px;
+  margin:0 auto;
+  align-items:center;
+}
+
+.about-text p{
+  font-size:18px;
+  line-height:1.9;
+  color:rgba(240,240,240,0.85);
+  margin-bottom:20px;
+}
+.about-text p strong{color:var(--gold);}
+
+.about-emblem{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+}
+
+.emblem-box{
+  width:260px;height:260px;
+  border:2px solid rgba(155,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  background:radial-gradient(ellipse at center, rgba(139,0,0,0.15) 0%, transparent 70%);
+}
+.emblem-box::before{
+  content:'';position:absolute;
+  inset:8px;
+  border:1px solid rgba(201,168,76,0.2);
+}
+.emblem-symbol{
+  font-family:'Cinzel',serif;
+  font-size:90px;
+  color:var(--red);
+  text-shadow:0 0 40px rgba(204,0,0,0.5);
+  line-height:1;
+}
+.emblem-text{
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px;letter-spacing:6px;
+  color:var(--light-gray);
+  text-transform:uppercase;
+  text-align:center;
+}
+
+/* ── HOW IT WORKS ── */
+#how{background:linear-gradient(to bottom, var(--black), #0d0000, var(--black));}
+
+.steps-container{
+  max-width:900px;
+  margin:0 auto;
+  position:relative;
+}
+.steps-line{
+  position:absolute;
+  left:39px;top:0;bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom, var(--red), transparent);
+}
+
+.step{
+  display:flex;gap:40px;
+  margin-bottom:60px;
+  position:relative;
+  opacity:0;
+  transform:translateX(-20px);
+  transition:all 0.6s ease;
+}
+.step.visible{opacity:1;transform:translateX(0);}
+
+.step-num{
+  flex-shrink:0;
+  width:80px;height:80px;
+  border:2px solid var(--red);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  background:var(--black);
+  z-index:1;
+}
+.step-num::before{
+  content:'';position:absolute;
+  inset:4px;
+  border:1px solid rgba(155,0,0,0.3);
+}
+.step-num span{
+  font-family:'Cinzel',serif;
+  font-size:24px;font-weight:700;
+  color:var(--red);
+}
+
+.step-content h3{
+  font-family:'Cinzel',serif;
+  font-size:20px;font-weight:700;
+  color:var(--gold);
+  margin-bottom:10px;
+  margin-top:20px;
+}
+.step-content p{
+  font-size:17px;
+  line-height:1.8;
+  color:rgba(240,240,240,0.75);
+}
+
+/* ── WHAT'S INSIDE ── */
+#inside{background:var(--black);}
+
+.pillars-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:2px;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.pillar{
+  padding:48px 36px;
+  background:rgba(13,0,0,0.6);
+  border:1px solid rgba(155,0,0,0.15);
+  position:relative;
+  overflow:hidden;
+  transition:all 0.4s;
+}
+.pillar::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right, var(--red), var(--gold));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.4s;
+}
+.pillar:hover::before{transform:scaleX(1);}
+.pillar:hover{background:rgba(30,0,0,0.8);}
+
+.pillar-icon{
+  font-size:36px;
+  margin-bottom:20px;
+  display:block;
+}
+.pillar h3{
+  font-family:'Cinzel',serif;
+  font-size:17px;font-weight:700;
+  letter-spacing:2px;
+  color:var(--gold);
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+.pillar p{
+  font-size:16px;
+  line-height:1.8;
+  color:rgba(240,240,240,0.7);
+}
+
+/* ── RANKS ── */
+#ranks{background:linear-gradient(to bottom, var(--black), #0a0000);}
+
+.ranks-list{
+  max-width:800px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.rank-item{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:24px 32px;
+  background:rgba(13,0,0,0.5);
+  border:1px solid rgba(155,0,0,0.1);
+  border-left:3px solid var(--red);
+  transition:all 0.3s;
+  cursor:default;
+}
+.rank-item:hover{
+  background:rgba(30,0,0,0.7);
+  border-left-color:var(--gold);
+  transform:translateX(6px);
+}
+.rank-item:first-child{border-left-color:var(--gold);}
+
+.rank-icon{font-size:28px;flex-shrink:0;width:40px;text-align:center;}
+.rank-info h4{
+  font-family:'Cinzel',serif;
+  font-size:15px;font-weight:700;
+  color:var(--white);
+  letter-spacing:2px;
+  margin-bottom:4px;
+}
+.rank-info p{
+  font-size:14px;
+  color:var(--light-gray);
+}
+.rank-id{
+  margin-left:auto;
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px;letter-spacing:2px;
+  color:var(--red);
+  opacity:0.7;
+}
+
+/* ── JOIN ── */
+#join{
+  background:linear-gradient(to bottom, #0a0000, var(--black));
+  text-align:center;
+}
+
+.join-inner{
+  max-width:700px;
+  margin:0 auto;
+}
+
+.join-quote{
+  font-family:'Crimson Text',serif;
+  font-style:italic;
+  font-size:22px;
+  color:var(--gold);
+  line-height:1.7;
+  margin-bottom:48px;
+  padding:32px;
+  border:1px solid rgba(201,168,76,0.2);
+  position:relative;
+}
+.join-quote::before{
+  content:'"';
+  position:absolute;
+  top:-20px;left:20px;
+  font-size:80px;
+  color:var(--red);
+  font-family:'Cinzel',serif;
+  opacity:0.3;
+  line-height:1;
+}
+
+.join-steps{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:48px;
+  text-align:left;
+}
+
+.join-step{
+  padding:24px;
+  background:rgba(13,0,0,0.6);
+  border:1px solid rgba(155,0,0,0.2);
+}
+.join-step-num{
+  font-family:'Cinzel',serif;
+  font-size:28px;font-weight:700;
+  color:var(--red);
+  opacity:0.5;
+  margin-bottom:8px;
+}
+.join-step h4{
+  font-family:'Rajdhani',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:2px;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.join-step p{
+  font-size:15px;
+  color:rgba(240,240,240,0.7);
+  line-height:1.7;
+}
+
+.join-oath{
+  padding:32px;
+  background:rgba(139,0,0,0.08);
+  border:1px solid rgba(155,0,0,0.3);
+  margin-bottom:40px;
+  position:relative;
+}
+.join-oath::before,.join-oath::after{
+  content:'☠';
+  position:absolute;
+  top:50%;transform:translateY(-50%);
+  font-size:20px;color:var(--red);opacity:0.3;
+}
+.join-oath::before{left:16px;}
+.join-oath::after{right:16px;}
+.join-oath p{
+  font-family:'Crimson Text',serif;
+  font-style:italic;
+  font-size:16px;
+  line-height:1.9;
+  color:rgba(240,240,240,0.8);
+}
+
+/* ── RULES PREVIEW ── */
+#rules{background:var(--black);}
+
+.rules-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+  gap:2px;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.rule-card{
+  padding:32px;
+  background:rgba(10,0,0,0.5);
+  border:1px solid rgba(155,0,0,0.1);
+  transition:all 0.3s;
+}
+.rule-card:hover{background:rgba(25,0,0,0.7);}
+
+.rule-number{
+  font-family:'Cinzel',serif;
+  font-size:42px;font-weight:900;
+  color:var(--red);
+  opacity:0.15;
+  line-height:1;
+  margin-bottom:8px;
+}
+.rule-title{
+  font-family:'Rajdhani',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:12px;
+}
+.rule-desc{
+  font-size:15px;
+  line-height:1.8;
+  color:rgba(240,240,240,0.65);
+}
+
+/* ── FOOTER ── */
+footer{
+  padding:60px 48px 40px;
+  background:#000;
+  border-top:1px solid rgba(155,0,0,0.3);
+  text-align:center;
+}
+.footer-logo{
+  font-family:'Cinzel',serif;
+  font-size:28px;font-weight:900;
+  letter-spacing:8px;
+  color:var(--gold);
+  margin-bottom:12px;
+}
+.footer-skull{color:var(--red);}
+.footer-motto{
+  font-family:'Crimson Text',serif;
+  font-style:italic;
+  font-size:16px;
+  color:var(--light-gray);
+  margin-bottom:32px;
+}
+.footer-links{
+  display:flex;gap:32px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:32px;
+}
+.footer-links a{
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gray);
+  text-decoration:none;
+  transition:color 0.3s;
+}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px;letter-spacing:2px;
+  color:rgba(100,100,100,0.6);
+  text-transform:uppercase;
+}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:16px 24px;}
+  .nav-links{display:none;}
+  section{padding:80px 24px;}
+  .about-grid{grid-template-columns:1fr;}
+  .join-steps{grid-template-columns:1fr;}
+  .emblem-box{width:200px;height:200px;}
+  .emblem-symbol{font-size:70px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo"><span>☠</span> SHADOWBORN</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#inside">Inside</a></li>
+    <li><a href="#ranks">Ranks</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#join">Join</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <p class="hero-skull">☠ &nbsp;&nbsp; ☠ &nbsp;&nbsp; ☠</p>
+  <h1 class="hero-title">
+    SHADOW
+    <span>BORN</span>
+  </h1>
+  <div class="hero-line"></div>
+  <p class="hero-tagline">"Born from the shadows, living in unity."</p>
+  <div class="hero-btns">
+    <a href="#join" class="btn-primary"><span>Join the Brotherhood</span></a>
+    <a href="#about" class="btn-secondary">Learn More</a>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ What is ShadowBorn</p>
+    <h2 class="section-title">Darkness Mein Paida Hue</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p><strong>ShadowBorn</strong> sirf ek gang nahi — yeh ek movement hai. Ek family hai. Un logon ke liye jo akele feel karte hain, system se thak gaye hain, aur chahte hain ki koi ho jo unke saath khada rahe.</p>
+      <p>Hum <strong>25+ logon</strong> ki ek community hain — jo ek doosre ke liye jeete hain, saath enjoy karte hain, aur zindagi ko ek team ki tarah face karte hain.</p>
+      <p>Yahan <strong>koi judge nahi karta</strong>. Koi ego nahi. Koi fake nahi. Sirf real connections, real loyalty, aur real brotherhood.</p>
+      <p>ShadowBorn ka janam andhere mein hua — par hum saath mil ke roshni banate hain.</p>
+    </div>
+    <div class="about-emblem">
+      <div class="emblem-box">
+        <span class="emblem-symbol">☠</span>
+      </div>
+      <p class="emblem-text">Official Brotherhood — Est. 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ The Process</p>
+    <h2 class="section-title">ShadowBorn Kaise Kaam Karta Hai</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="steps-container">
+    <div class="steps-line"></div>
+
+    <div class="step">
+      <div class="step-num"><span>01</span></div>
+      <div class="step-content">
+        <h3>Invite Only Entry</h3>
+        <p>ShadowBorn mein koi bhi khud apply nahi kar sakta. Sirf ek existing member tumhe invite kar sakta hai. Yeh ensure karta hai ki har member genuine aur trusted ho.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"><span>02</span></div>
+      <div class="step-content">
+        <h3>Recruitment Form Fill Karo</h3>
+        <p>Official form fill karo — apna naam, city, social handle, aur 7 loyalty questions ke jawab. Koi shortcut nahi — sach mein, dil se likho.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"><span>03</span></div>
+      <div class="step-content">
+        <h3>The Faded Period — 1 Month</h3>
+        <p>Pehle 30 din tum "The Faded" rank mein rehte ho. Observe karte ho, seekhte ho, aur apni loyalty prove karte ho. Koi rule violation nahi — bilkul nahi.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"><span>04</span></div>
+      <div class="step-content">
+        <h3>Dark Oath Sign Karo</h3>
+        <p>Official Dark Oath sign karo — brotherhood ka wada karo. Loyalty, respect, aur unity — in teeno pe commitment zaroori hai ShadowBorn mein entry ke liye.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"><span>05</span></div>
+      <div class="step-content">
+        <h3>Reborn — Official Member</h3>
+        <p>Agar Shadow King aur Right Hand approve kare — tumhara official "Reborn" ceremony hota hai. Tumhe Gang ID milti hai, Member ID Card milta hai, aur tum officially "The Born" ban jaate ho.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section id="inside">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ Brotherhood Benefits</p>
+    <h2 class="section-title">ShadowBorn Mein Kya Kya Hai</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar">
+      <span class="pillar-icon">🤝</span>
+      <h3>Real Brotherhood</h3>
+      <p>Koi bhi mushkil mein akela nahi — online ya offline, har situation mein apne bhai saath milenge. Yeh sirf words nahi, yeh ShadowBorn ka first rule hai.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">🔥</span>
+      <h3>Events & Rides</h3>
+      <p>Regular meetups, rides, matches, aur trips. Zindagi sirf online nahi — hum real duniya mein bhi saath nikalte hain aur memories banate hain.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">🆔</span>
+      <h3>Official Identity</h3>
+      <p>Har member ko ek official Gang ID, Member ID Card, aur unique rank milti hai. Tum ShadowBorn ke ek hisse ho — yeh tumhari identity hai.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">📸</span>
+      <h3>Content & Reels</h3>
+      <p>Gang ke official reels, collabs, aur social media content mein participate karo. ShadowBorn ki story duniya ke saamne laao — saath mein.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">💰</span>
+      <h3>Fund Satym System</h3>
+      <p>Monthly contribution se ek shared fund banta hai — T-shirts, events, aur emergency help ke liye. Transparent aur fair — har rupya track hota hai.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">👑</span>
+      <h3>Rank Progression</h3>
+      <p>The Faded se Shadow King tak — har rank loyalty aur dedication se kamayi jaati hai. Grow karo, contribute karo, aur apni legacy banao.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RANKS -->
+<section id="ranks">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ Identity System</p>
+    <h2 class="section-title">Rank Structure</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="ranks-list">
+    <div class="rank-item">
+      <span class="rank-icon">👑</span>
+      <div class="rank-info">
+        <h4>The Shadow King</h4>
+        <p>The Mind. The Origin. The Eternal Flame — Gang ka founder aur final authority.</p>
+      </div>
+      <span class="rank-id">SB-001</span>
+    </div>
+    <div class="rank-item">
+      <span class="rank-icon">⚔</span>
+      <div class="rank-info">
+        <h4>The Right Hand</h4>
+        <p>The Enforcer — Shadow King ka voice, gang ka operations manager.</p>
+      </div>
+      <span class="rank-id">SB-002</span>
+    </div>
+    <div class="rank-item">
+      <span class="rank-icon">🐺</span>
+      <div class="rank-info">
+        <h4>The ShadowCore</h4>
+        <p>Elite members — gang ke projects, events, aur recruitment handle karte hain.</p>
+      </div>
+      <span class="rank-id">SB-100+</span>
+    </div>
+    <div class="rank-item">
+      <span class="rank-icon">🔥</span>
+      <div class="rank-info">
+        <h4>The Born</h4>
+        <p>Official members — gang ka dil. Loyal, active, aur fearless.</p>
+      </div>
+      <span class="rank-id">SB-200+</span>
+    </div>
+    <div class="rank-item">
+      <span class="rank-icon">🌘</span>
+      <div class="rank-info">
+        <h4>The Faded</h4>
+        <p>New recruits — 1 month observation period mein apni loyalty prove karte hain.</p>
+      </div>
+      <span class="rank-id">SB-300+</span>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ Zero Tolerance</p>
+    <h2 class="section-title">Brotherhood ke Rules</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="rules-grid">
+    <div class="rule-card">
+      <div class="rule-number">01</div>
+      <div class="rule-title">🩸 Loyalty & Betrayal</div>
+      <p class="rule-desc">Gang ka koi bhi secret bahar leak karna ya apne bhai ko dhoka dena — permanent ban. Koi second chance nahi.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-number">02</div>
+      <div class="rule-title">👑 Respect & Ego</div>
+      <p class="rule-desc">Kisi bhi member ko humiliate karna ya ego dikhana strictly banned. Yahan sab equal hain — rank power nahi, zimmedari deta hai.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-number">03</div>
+      <div class="rule-title">⚔ Conflict Resolution</div>
+      <p class="rule-desc">Problem ho toh seedha baat karo — public drama nahi. Leader aur Right Hand mediator hain. Unka final decision maana jayega.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-number">04</div>
+      <div class="rule-title">📱 Social Media</div>
+      <p class="rule-desc">Gang ke internal issues kabhi public pe nahi. Social media pe hamesha ShadowBorn ko strong aur united dikhao.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-number">05</div>
+      <div class="rule-title">🌘 New Member Rules</div>
+      <p class="rule-desc">Faded period mein zero violations. Senior members se seekho, observe karo, aur apni loyalty actions se prove karo.</p>
+    </div>
+    <div class="rule-card">
+      <div class="rule-number">06</div>
+      <div class="rule-title">💀 Punishment System</div>
+      <p class="rule-desc">Warning → Strike 1 → Strike 2 → Permanent Ban. Fair aur transparent — koi favoritism nahi, koi VIP nahi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="section-header">
+    <p class="section-eyebrow">☠ Become One of Us</p>
+    <h2 class="section-title">ShadowBorn Kaise Join Karein</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="join-inner">
+    <div class="join-quote">
+      Only those born from shadows can walk beside us. Agar tu bhi darkness se aaya hai — tu hamare saath hai.
+    </div>
+
+    <div class="join-steps">
+      <div class="join-step">
+        <div class="join-step-num">01</div>
+        <h4>Invite Lao</h4>
+        <p>Kisi existing ShadowBorn member se invite lo. Bina invite ke entry possible nahi.</p>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">02</div>
+        <h4>Form Bharo</h4>
+        <p>Official recruitment form sach mein fill karo — 7 loyalty questions ke saath.</p>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">03</div>
+        <h4>Test Period</h4>
+        <p>1 month Faded period — active raho, rules follow karo, loyalty prove karo.</p>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">04</div>
+        <h4>Reborn Ho</h4>
+        <p>Approval milne ke baad officially "The Born" ban jao — Gang ID ke saath.</p>
+      </div>
+    </div>
+
+    <div class="join-oath">
+      <p>"Main samajhta hoon ki ShadowBorn join karna ek brotherhood ka hissa banna hai — koi ego nahi, koi nafrat nahi, koi dhoka nahi. Main wada karta hoon ki loyal rahunga, respect dunga, aur gang ke code ke khilaf kabhi nahi jaunga."</p>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#" class="btn-primary"><span>☠ Join Now</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span class="footer-skull">☠</span> SHADOWBORN <span class="footer-skull">☠</span></div>
+  <p class="footer-motto">"Born from the shadows, living in unity."</p>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#how">How It Works</a>
+    <a href="#inside">Brotherhood</a>
+    <a href="#ranks">Ranks</a>
+    <a href="#rules">Rules</a>
+    <a href="#join">Join</a>
+  </div>
+  <p class="footer-copy">© 2026 ShadowBorn Official — All Rights Reserved</p>
+</footer>
+
+<script>
+// Scroll animation for steps
+const steps = document.querySelectorAll('.step');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if(entry.isIntersecting){
+      setTimeout(() => entry.target.classList.add('visible'), i * 150);
+    }
+  });
+}, {threshold: 0.2});
+steps.forEach(s => observer.observe(s));
+
+// Smooth active nav
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if(window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#'+current ? 'var(--gold)' : '';
+  });
+});
+</script>
+</body>
+</html>
